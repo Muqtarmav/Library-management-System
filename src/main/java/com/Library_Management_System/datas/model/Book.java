@@ -22,7 +22,7 @@ public class Book {
     private String category;
     @Column(nullable = false)
     private int pageCount;
-    @Column(nullable = false)
     private String publishDate;
+
     private String imageUrl;
 }

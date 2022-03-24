@@ -7,11 +7,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+
+@Sql(scripts = {"/db/insert.sql"})
 @Slf4j
 @SpringBootTest
 class UserRepositoryTest {
@@ -37,9 +40,10 @@ class UserRepositoryTest {
         user.setMobile("081973823");
         user.setAge("20");
 
+        assertThat(user.getId()).isNull();
         log.info("user can be saved::{}", user);
         userRepository.save(user);
-        assertThat(user.getId()).isNull();
+
         assertThat(user.getFirstName()).isEqualTo("ade");
         assertThat(user.getLastName()).isEqualTo("tolani");
         assertThat(user.getId()).isNotNull();
@@ -55,7 +59,7 @@ class UserRepositoryTest {
 
         List<User> user = userRepository.findAll();
         assertThat(user).isNotNull();
-        assertThat(user.size()).isEqualTo(1);
+        assertThat(user.size()).isEqualTo(3);
     }
 
 
@@ -67,35 +71,37 @@ class UserRepositoryTest {
 
     void userCanBeFindByIdTest(){
 
-        User user = userRepository.findById(1L).orElse(null);
+        User user = userRepository.findById(2L).orElse(null);
         assertThat(user).isNotNull();
-        assertThat(user.getFirstName());
-        assertThat(user.getLastName());
-        assertThat(user.getEmail());
-        assertThat(user.getMobile());
+        assertThat(user.getFirstName()).isEqualTo("samieg");
+        assertThat(user.getLastName()).isEqualTo("gold");
+        assertThat(user.getEmail()).isEqualTo("gold@gmail.com");
+        assertThat(user.getMobile()).isEqualTo("07028294393");
+        assertThat(user.getId()).isEqualTo(2);
 
         log.info("user id retrieved::{}", user);
 
     }
 
-//
-//    @Test
-//    @DisplayName("update user records")
-//    void userRecordsCanBeUpdatedTest(){
-//        User user = new User();
-//        assertThat(user).isNotNull();
-//        assertThat(user.getFirstName()).isEqualTo();
-//        assertThat(user.getLastName()).isEqualTo();
-//        assertThat(user.getEmail()).isEqualTo();
-//
-//        user.setEmail("");
-//
-//        log.info("user record has been updated");
-//        userRepository.save(user);
-//
-//        assertThat(user.getFirstName()).isEqualTo();
-//        assertThat(user.getEmail()).isEqualTo();
-//    }
+
+    @Test
+    @DisplayName("update user records")
+    void userRecordsCanBeUpdatedTest(){
+        User savedUser  = userRepository.findByEmail("gold@gmail.com").orElse(null);
+        assertThat(savedUser).isNotNull();
+        assertThat(savedUser.getFirstName()).isEqualTo("samieg");
+        assertThat(savedUser.getLastName()).isEqualTo("gold");
+        assertThat(savedUser.getEmail()).isEqualTo("gold@gmail.com");
+
+        savedUser.setEmail("goldenboy@gmail.com");
+
+        log.info("user record has been updated");
+        userRepository.save(savedUser);
+
+        assertThat(savedUser.getFirstName()).isEqualTo("samieg");
+        assertThat(savedUser.getEmail()).isEqualTo("goldenboy@gmail.com");
+    }
+
 
     @Test
     @DisplayName("user can be delete")
