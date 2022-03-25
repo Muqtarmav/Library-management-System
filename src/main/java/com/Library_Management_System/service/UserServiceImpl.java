@@ -5,7 +5,11 @@ import com.Library_Management_System.datas.repository.UserRepository;
 import com.Library_Management_System.dtos.UserDto;
 import com.Library_Management_System.exceptions.UserDoesNotExistException;
 import com.Library_Management_System.exceptions.UserLogicException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +23,13 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
 
         return userRepository.findAll();
     }
 
     @Override
-    public User addUser(UserDto userDto) {
+    public User addUser(UserDto userDto) throws UserLogicException {
 
         if (userDto == null) {
             throw new IllegalArgumentException("argument cannot be null");
@@ -57,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User findById(Long id) {
+    public User findUserById(Long id) throws UserDoesNotExistException {
         if (id == null){
             throw new IllegalArgumentException("argument cannot be null");
         }
@@ -71,8 +75,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserById(Long id, JsonPatch user) {
-        return null;
+    public User updateUserRecords(Long id, JsonPatch userPatch) throws UserLogicException {
+
+        Optional<User> userQuery = userRepository.findById(id);
+
+        if ( userQuery.isEmpty()){
+            throw new IllegalArgumentException("user with id" + id + "does not exist");
+        }
+
+        User user1 = userQuery.get();
+
+        try{
+            user1 = applyPatchToUser(userPatch, user1);
+            return saveOrUpdate(user1);
+        }
+
+        catch(JsonPatchException | JsonProcessingException | UserLogicException je){
+            throw new UserLogicException("update failed");
+        }
+    }
+
+    private User applyPatchToUser(JsonPatch productPatch, User user1) throws JsonProcessingException, JsonPatchException{
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode patched = productPatch.apply(objectMapper.convertValue(user1, JsonNode.class));
+
+        return objectMapper.treeToValue(patched, User.class);
     }
 
     @Override

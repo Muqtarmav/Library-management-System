@@ -9,4 +9,5 @@ public class UserDto {
     private String lastName;
     private String email_address;
     private String mobile;
+    private String age;
 }

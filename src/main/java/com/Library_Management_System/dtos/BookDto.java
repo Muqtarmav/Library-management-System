@@ -1,6 +1,7 @@
 package com.Library_Management_System.dtos;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class BookDto {
@@ -10,4 +11,5 @@ public class BookDto {
     private String description;
     private String category;
     private int pageCount;
+    private MultipartFile image;
 }
