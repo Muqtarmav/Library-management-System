@@ -53,17 +53,17 @@ public class BookServiceImpl implements BookService{
         }
 
         Book book = new Book();
-        try {
-            if (bookDto.getImage() != null) {
-                Map<?, ?> getUpload = cloudinaryService.upload(bookDto.getImage().getBytes(),
-                        ObjectUtils.asMap("public_id", "inventory/" + bookDto.getImage().getOriginalFilename()));
-                book.setImageUrl(getUpload.get("url").toString());
-            }
-        }
-
-        catch (IOException e){
-            e.printStackTrace();
-        }
+//        try {
+//            if (bookDto.getImage() != null) {
+//                Map<?, ?> getUpload = cloudinaryService.upload(bookDto.getImage().getBytes(),
+//                        ObjectUtils.asMap("public_id", "inventory/" + bookDto.getImage().getOriginalFilename()));
+//                book.setImageUrl(getUpload.get("url").toString());
+//            }
+//        }
+//
+//        catch (IOException e){
+//            e.printStackTrace();
+//        }
 
         book.setTitle("java");
         book.setAuthor("daitel");

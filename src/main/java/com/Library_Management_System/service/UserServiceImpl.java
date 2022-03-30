@@ -46,6 +46,9 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail_address());
         user.setMobile(userDto.getMobile());
+        user.setAge(userDto.getAge());
+        user.setUserName(userDto.getUserName());
+        user.setPassword(userDto.getPassWord());
 
       return userRepository.save(user);
     }
@@ -71,7 +74,7 @@ public class UserServiceImpl implements UserService {
             return result.get();
         }
 
-        throw new IllegalArgumentException("user with id"+ id + "does not exist");
+        throw new UserDoesNotExistException("user with id"+ id + "does not exist");
     }
 
     @Override

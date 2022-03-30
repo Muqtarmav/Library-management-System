@@ -6,6 +6,7 @@ import com.Library_Management_System.datas.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+//import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,14 +24,30 @@ public class CustomUserDetailService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String firstNameOrEmail) throws UsernameNotFoundException {
-        User user = userRepository.findByFirstNameOrEmail((firstNameOrEmail), firstNameOrEmail).orElseThrow(() -> new UsernameNotFoundException("user not found with this firstName or email" + firstNameOrEmail));
+    public UserDetails loadUserByUsername(String userNameOrEmail) throws UsernameNotFoundException {
+        User user = userRepository.findByFirstNameOrEmail(userNameOrEmail, userNameOrEmail).orElseThrow(() -> new UsernameNotFoundException("user not found with username or email" + userNameOrEmail));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getFirstName(), mapRolesToAuthorities(user.getRoleList()));
-    }
-        private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roleList){
-            return roleList.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-        }
-
+        return new org.springframework.security.core.userdetails.User(user.getFirstName(), user.getEmail(), mapRolesToAuthorities(user.getRoleList()));
     }
 
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roleList) {
+        return roleList.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+    }
+
+
+}
+
+//    @Override
+//    public UserDetails loadUserByUsername(String firstNameOrEmail) throws UsernameNotFoundException {
+//        User user = userRepository.findByFirstNameOrEmail((firstNameOrEmail), firstNameOrEmail).orElseThrow(() -> new UsernameNotFoundException("user not found with this firstName or email" + firstNameOrEmail));
+//
+//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getFirstName(), mapRolesToAuthorities(user.getRoleList()));
+//    }
+//        private Collection< ? extends GrantedAuthority> mapRolesToAuthorities(Set<Role> roleList){
+//            return roleList.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+//        }
+//
+//    }
+//}
+//
+//}

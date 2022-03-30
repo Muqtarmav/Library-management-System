@@ -10,4 +10,6 @@ public class UserDto {
     private String email_address;
     private String mobile;
     private String age;
+    private String userName;
+    private String passWord;
 }

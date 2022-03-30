@@ -39,7 +39,8 @@ class UserRepositoryTest {
         user.setEmail("ade@gmail.com");
         user.setMobile("081973823");
         user.setAge("20");
-
+        user.setUserName("adeTolani");
+        user.setPassword("ade12345");
         assertThat(user.getId()).isNull();
         log.info("user can be saved::{}", user);
         userRepository.save(user);
@@ -48,6 +49,8 @@ class UserRepositoryTest {
         assertThat(user.getLastName()).isEqualTo("tolani");
         assertThat(user.getId()).isNotNull();
         assertThat(user.getEmail()).isEqualTo("ade@gmail.com");
+        assertThat(user.getUserName()).isEqualTo("adeTolani");
+        assertThat(user.getPassword()).isEqualTo("ade12345");
 
     }
 
@@ -61,9 +64,6 @@ class UserRepositoryTest {
         assertThat(user).isNotNull();
         assertThat(user.size()).isEqualTo(3);
     }
-
-
-
 
 
     @Test

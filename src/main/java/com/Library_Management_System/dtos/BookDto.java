@@ -11,5 +11,5 @@ public class BookDto {
     private String description;
     private String category;
     private int pageCount;
-    private MultipartFile image;
+   // private MultipartFile image;
 }
