@@ -11,8 +11,8 @@ values(12, 'muqt', 'tunji', 'muqt@gmail.com', '08342778984', '17', 'muqtyjay', '
 (3, 'yungcash', 'blessing', '@yungcash@gmail.com', '090563883993', '16', 'cashi', 'cash123');
 
 
-insert into role(role_id, name, description)
-values(2, 'user_role', 'this user has access to the site'),
+insert into role(id, name, description)
+values(15, 'user_role', 'this user has access to the site'),
 (5, 'admin_role',  'this user has ultimate access to this site');
 
 
@@ -23,6 +23,6 @@ values(10, 'java', 'daitel', 'programming language', 700, 'software engineering'
 
 
 insert into user_role(user_id, role_id)
-values(12, 2);
+values(12, 15);
 
 set foreign_key_checks = 1;
