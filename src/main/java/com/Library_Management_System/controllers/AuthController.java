@@ -14,10 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 
@@ -47,6 +44,7 @@ public class AuthController {
 
     }
 
+
     @PostMapping("/signUp")
     public ResponseEntity<?> registerUser(@RequestBody SignUpDto signUpDto){
 
@@ -65,7 +63,7 @@ public class AuthController {
         user.setEmail(signUpDto.getEmail());
         user.setPassword(passwordEncoder.encode(signUpDto.getPassWord()));
 
-        Role role = roleRepository.findByName("admin_role").get();
+        Role role = roleRepository.findByName("user_role").get();
         user.setRoleList(Collections.singleton(role));
         userRepository.save(user);
 

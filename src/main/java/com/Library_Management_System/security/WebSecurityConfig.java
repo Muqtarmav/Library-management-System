@@ -13,12 +13,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -35,32 +36,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET,   "/api").permitAll()
+                .antMatchers("/api/user", "api/book").permitAll()
                 .antMatchers("/api/auth").permitAll()
+                .antMatchers("/login")
+                .hasRole("user_role")
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+              .formLogin().permitAll();
+        // .httpBasic();
 
 
-
-
-//                .antMatchers("/").permitAll()
 //                .antMatchers("/home")
-//                .hasAuthority("User_role")
-//                .antMatchers("/admin")
-//                .hasAuthority("admin_role")
+//                  .hasAuthority("user")
+//               // .antMatchers("/admin")
+//                //.hasAuthority("admin")
 //                .anyRequest()
+//                //.fullyAuthenticated()
 //                .authenticated()
 //                .and()
 //                .httpBasic();
-//
 
 
-
-
-
-
+        //  .antMatchers(HttpMethod.GET,   "/api").permitAll()
 
 
 //
@@ -79,18 +77,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //  auth.inMemoryAuthentication().withUser("muqtarjay").password("muqtar4").roles("user_role");
         auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
 
     }
 
     @Override
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
 
     }
-
-
+//
 //
 //    @Bean
 //    public AuthenticationProvider authenticationProvider(){
