@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -28,9 +29,13 @@ public class Book {
 
     private String imageUrl;
 
-//    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "book_id", referencedColumnName = "bookId")
-//    private List<Story> StoryList = new ArrayList<>();
+
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @JoinTable(name = "book_story",
+//            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(name = "story_id", referencedColumnName = "id"))
+//    private Set<Story> stories;
+
 }
 
 

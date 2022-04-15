@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+
     @Override
     public User addUser(UserDto userDto) throws UserLogicException {
 
@@ -50,31 +51,30 @@ public class UserServiceImpl implements UserService {
         user.setUserName(userDto.getUserName());
         user.setPassword(userDto.getPassWord());
 
-      return userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private User saveOrUpdate(User user) throws UserLogicException {
-        if ( user == null){
-        throw new UserLogicException("user cannot be null");
+        if (user == null) {
+            throw new UserLogicException("user cannot be null");
         }
 
         return userRepository.save(user);
     }
 
 
-
     @Override
     public User findUserById(Long id) throws UserDoesNotExistException {
-        if (id == null){
+        if (id == null) {
             throw new IllegalArgumentException("argument cannot be null");
         }
 
         Optional<User> result = userRepository.findById(id);
-        if ( result.isPresent()){
+        if (result.isPresent()) {
             return result.get();
         }
 
-        throw new UserDoesNotExistException("user with id"+ id + "does not exist");
+        throw new UserDoesNotExistException("user with id" + id + "does not exist");
     }
 
     @Override
@@ -82,23 +82,21 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> userQuery = userRepository.findById(id);
 
-        if ( userQuery.isEmpty()){
+        if (userQuery.isEmpty()) {
             throw new IllegalArgumentException("user with id" + id + "does not exist");
         }
 
         User user1 = userQuery.get();
 
-        try{
+        try {
             user1 = applyPatchToUser(userPatch, user1);
             return saveOrUpdate(user1);
-        }
-
-        catch(JsonPatchException | JsonProcessingException | UserLogicException je){
+        } catch (JsonPatchException | JsonProcessingException | UserLogicException je) {
             throw new UserLogicException("update failed");
         }
     }
 
-    private User applyPatchToUser(JsonPatch productPatch, User user1) throws JsonProcessingException, JsonPatchException{
+    private User applyPatchToUser(JsonPatch productPatch, User user1) throws JsonProcessingException, JsonPatchException {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -109,8 +107,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(User user) {
-
         userRepository.delete(user);
 
     }
+
+    @Override
+    public void deleteById(Long id) throws UserDoesNotExistException {
+        userRepository.findById(id).orElseThrow(() ->
+                new UserDoesNotExistException("user with id is not found" + id));
+
+       userRepository.deleteById(id);
+    }
+
 }
+
+
+

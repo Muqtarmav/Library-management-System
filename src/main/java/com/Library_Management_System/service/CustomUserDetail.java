@@ -11,9 +11,10 @@ import java.util.stream.Collectors;
 
 public class CustomUserDetail extends User implements UserDetails {
 
-//    public CustomUserDetail(User user){
-//        super();
-//    }
+    public CustomUserDetail(Long id, String firstName, String email, String username, String age) {
+        super(id, firstName, email, username, age);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return getRoleList()

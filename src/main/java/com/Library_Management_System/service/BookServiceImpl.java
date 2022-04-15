@@ -45,11 +45,10 @@ public class BookServiceImpl implements BookService{
         if ( bookDto == null){
             throw new IllegalArgumentException("argument cannot be null");
         }
-
         Optional<Book> query = bookRepository.findByCategory(bookDto.getCategory());
         if (query.isPresent()){
-            throw new BookLogicException("book category exists" + bookDto.getCategory());
-           // return query.get();
+           // throw new BookLogicException("book category exists" + bookDto.getCategory());
+            return query.get();
         }
 
         Book book = new Book();

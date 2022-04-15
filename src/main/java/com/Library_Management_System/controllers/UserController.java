@@ -31,9 +31,9 @@ public class UserController {
     }
 
 
-    @GetMapping("get/user/id")
-        public ResponseEntity<?>findById(Long id){
-
+    @GetMapping("get/user/{id}")
+        public ResponseEntity<?>findById(@PathVariable("id") Long id){
+        log.info("Hit endpoint!");
         try{
             User savedUser = userService.findUserById(id);
             return ResponseEntity.ok().body(savedUser);
